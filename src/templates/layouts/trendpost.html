@@ -1,0 +1,92 @@
+{% load static %}
+
+<section class="main-highlight">
+    <div class="highlight-carousel grid-posts">
+        
+        <div class="grid-rows">
+            <div class="columns column-4">
+              
+                <article class="post-box" style="background-image: url({{ posts.0.thumbnail.url }});">
+                    <div class="post-overlay">
+                        
+                        {% for a in posts.0.categories.all %}
+                            <a href="" class="post-category" title="Title of blog post" rel="tag">{{ a.nameCat }}</a>
+                        {% endfor %}
+                            
+                        <h3 class="post-title">{{ posts.0.title }}</h3>
+                        <div class="post-meta">
+                            <div class="post-meta-author-avatar">
+                                <img alt="avatar" src="{{ posts.0.author.profile_pic.url }}" class="avatar" height="24" width="24">
+                            </div>
+                            <div class="post-meta-author-info">
+                                <span class="post-meta-author-name">
+                                    <a href="#" title="Posts by {{ posts.0.author }}" rel="author">{{ posts.0.author }}</a>
+                                </span>
+                                <span class="middot">·</span>
+                                <span class="post-meta-date">
+                                    <abbr class="published updated" title="{ posts.0.timestamp | date }}">{{ posts.0.timestamp | date }}</abbr>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="post/{{ posts.0.slug }}" class="post-overlayLink"></a>
+                </article>
+
+            </div>
+            <div class="columns column-2">
+
+                <article class="post-box" style="background-image: url({{ posts.1.thumbnail.url }});">
+                    <div class="post-overlay">
+                        {% for b in posts.1.categories.all %}
+                             <a href="#" class="post-category" title="Title of blog post" rel="tag">{{ b.nameCat}}</a>
+                        {% endfor %}
+                        
+                        <h3 class="post-title">{{ posts.1.title }}</h3>
+                        <div class="post-meta">
+                            <div class="post-meta-author-avatar">
+                                <img alt="avatar" src="{{ posts.1.author.profile_pic.url }}" class="avatar" height="24" width="24">
+                            </div>
+                            <div class="post-meta-author-info">
+                                <span class="post-meta-author-name">
+                                    <a href="#" title="Posts by {{ posts.1.author }}" rel="author">{{ posts.1.author }}</a>
+                                </span>
+                                <span class="middot">·</span>
+                                <span class="post-meta-date">
+                                    <abbr class="published updated" title="{ posts.1.timestamp | date }}">{{ posts.1.timestamp | date }}</abbr>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="post/{{ posts.1.slug }}" class="post-overlayLink"></a>
+                </article>
+
+                <article class="post-box" style="background-image: url({{ posts.2.thumbnail.url }});">
+                    <div class="post-overlay">
+                        {% for c in posts.2.categories.all %}
+                             <a href="#" class="post-category" title="Title of blog post" rel="tag">{{ c.nameCat}}</a>
+                        {% endfor %}
+                        <h3 class="post-title">{{ posts.2.title }}</h3>
+                        <div class="post-meta">
+                            <div class="post-meta-author-avatar">
+                                <img alt="avatar" src="{{ posts.2.author.profile_pic.url }}" class="avatar" height="24" width="24">
+                            </div>
+                            <div class="post-meta-author-info">
+                                <span class="post-meta-author-name">
+                                    <a href="#" title="Posts by {{ posts.2.author }}" rel="author">{{ posts.2.author }}</a>
+                                </span>
+                                <span class="middot">·</span>
+                                <span class="post-meta-date">
+                                    <abbr class="published updated" title="{{ posts.2.timestamp | date }}">{{ posts.2.timestamp | date }}</abbr>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="post/{{ posts.2.slug }}" class="post-overlayLink"></a>
+                </article>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,106 @@
+{% load static %}
+{% load mptt_tags %}
+{% if messages %}
+
+{% endif %}
+<header class="header">
+    <div class="header-wrapper">
+
+        <!--sidebar menu toggler start -->
+        <div class="toggle-sidebar material-button">
+            <i class="material-icons">&#xE5D2;</i>
+        </div>
+        <!--sidebar menu toggler end -->
+
+        <!--logo start -->
+        <div class="logo-box">
+            <h1>
+                <a href="/" class="logo"></a>
+            </h1>
+        </div>
+        <!--logo end -->
+
+        <div class="header-menu">
+
+            <!-- header left menu start -->
+            <ul class="header-navigation" data-show-menu-on-mobile>
+                <li>
+                    <a href="/" class="material-button active"> <span class="menu-icon"><i
+                                class="material-icons">&#xE88A;</i></span> HOME</a>
+
+                </li>
+
+                {% recursetree cat %}
+                <li>
+                    {% if not node.is_leaf_node %}
+
+                    {% else %}
+                    <a href="#" class="material-button">{{ node.nameCat}}</a>
+                    {% endif %}
+                </li>
+                {% endrecursetree %}
+            </ul>
+            <!-- header left menu end -->
+
+        </div>
+        <div class="header-right with-seperator">
+
+            <!-- header right menu start -->
+            <ul class="header-navigation">
+                <li>
+                    <a href="#" class="material-button search-toggle"><i class="material-icons">&#xE8B6;</i></a>
+                </li>
+                {% if user.is_authenticated %}
+
+                <li class="nav-item avatar">
+                    
+                    <a class="material-button submenu-toggle p-0" href="#">
+                        <img src="{% if user.author.profile_pic.url %} {{ user.author.profile_pic.url }} {% else%} {% static 'img/user.png'%} {% endif %}" class="rounded-circle z-depth-0" alt="avatar image"
+                            height="35">
+                        <span class="hide-on-tablet">{{ user.username }}</span>
+                    </a>
+                    <div class="header-submenu">
+                        <ul>
+                            <li><a href="/logout/"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {% else %}
+                <li>
+                    <a href="#" class="material-button submenu-toggle"><i class="material-icons">&#xE7FD;</i> <span
+                            class="hide-on-tablet">Tài Khoản</span></a>
+                    <div class="header-submenu">
+                        <ul>
+                            <li><a href="#" data-modal="loginModal"><span>Đăng Nhập</span> </a></li>
+                            <li><a href="#" data-modal="registerModal">Đăng Ký Thành Viên</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {% endif %}
+
+
+
+                <li class="hide-on-mobile"><a href="#" class="material-button" data-modal="newsletterModal"><i
+                            class="material-icons">&#xE0E1;</i></a></li>
+            </ul>
+            <!-- header right menu end -->
+
+        </div>
+
+        <!--header search panel start -->
+        <div class="search-bar">
+            <form class="search-form">
+                <div class="search-input-wrapper">
+                    <input type="text" name="qq" placeholder="Nhập Để Tìm Kiếm........" class="search-input">
+                    <button type="submit" name="search" class="search-submit"><i
+                            class="material-icons">&#xE5C8;</i></button>
+                </div>
+                <span class="search-close search-toggle">
+                    <i class="material-icons">&#xE5CD;</i>
+                </span>
+            </form>
+        </div>
+        <!--header search panel end -->
+
+    </div>
+</header>

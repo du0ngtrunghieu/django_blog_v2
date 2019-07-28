@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!--Main container start -->
+<main class="main-container">
+	{% include './layouts/siderbar.html' %}
+	<!-- Detail extra post start -->
+	<!-- <div class="extra-posts">
+			<div class="extra-post-wrapper">
+				<div class="columns column-2">
+					<article class="extra-post-box">
+						<a href="#" class="extra-post-link">
+							<div class="post-image">
+								<span><img src="{ % static 'img/news-test-images/news-img9.jpg' %}" width="80" height="80"></span>
+							</div>
+							<div class="post-title">
+								Web Design Common Mistakes and Lessons Learned
+								<span class="post-date">September 14, 2018</span>
+							</div>
+						</a>
+					</article>
+				</div>
+				<div class="columns column-2">
+					<article class="extra-post-box">
+						<a href="#" class="extra-post-link">
+							<div class="post-image">
+								<span><img src="{ % static 'img/news-test-images/news-img11.jpg'%}" width="80" height="80"></span>
+							</div>
+							<div class="post-title">
+								Web Design Common Mistakes and Lessons Learned
+								<span class="post-date">September 14, 2018</span>
+							</div>
+						</a>
+					</article>
+				</div>
+				<div class="columns column-2">
+					<article class="extra-post-box">
+						<a href="#" class="extra-post-link">
+							<div class="post-image">
+								<span><img src="{ % static 'img/news-test-images/news-img3.jpg'%}" width="80" height="80"></span>
+							</div>
+							<div class="post-title">
+								Web Design Common Mistakes and Lessons Learned
+								<span class="post-date">September 14, 2018</span>
+							</div>
+						</a>
+					</article>
+				</div>
+			</div>
+		</div> -->
+	<!-- Detail extra post start -->
+
+	<section class="sub-highlight">
+
+		<!-- Detail parallax start -->
+		<div class="parallax-box">
+			<div class="parallax-image" style="background-image: url({{ post.thumbnail.url}});"></div>
+			<article class="post-box">
+				<div class="post-overlay">
+					<div class="post-overlay-inner">
+
+						{% for a in post.categories.all %}
+						<a href="#" class="post-category" title="Title of blog post" rel="tag">{{ a.nameCat}}</a>
+						{% endfor %}
+
+
+						<h1 class="post-title">{{ post.title }}</h1>
+						<div class="post-meta">
+							<div class="post-meta-author-avatar">
+								<img alt="avatar" src="{{ post.author.profile_pic.url }}" class="avatar" height="24"
+									width="24">
+							</div>
+							<div class="post-meta-author-info">
+								<span class="post-meta-author-name">
+									<a href="#" title="Posts by {{ post.author }}" rel="author">{{ post.author }}</a>
+								</span>
+								
+								<span class="middot">·</span>
+								<span class="post-meta-date">
+									<abbr class="published updated" title="December 4, 2017">{{ post.timestamp | timesince }} ago</abbr>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</article>
+		</div>
+		<!-- Detail parallax end -->
+
+	</section>
+	<section class="main-content">
+		<div class="main-content-wrapper">
+			<div class="content-body">
+
+				<!-- article body start -->
+				<article class="article-wrapper">
+					<div class="article-header">
+						<div class="breadcrumb">
+							<ul>
+								<li><a href="/"><span>Home</span></a> <i class="material-icons">&#xE315;</i></li>
+								{% for b in post.categories.all %}
+								<li><a href="#"><span>{{ b.nameCat }}</span></a> <i class="material-icons">&#xE315;</i>
+								</li>
+								{% endfor %}
+
+								<li><span>{{post.title}}</span></li>
+									
+							</ul>
+							
+						</div>
+						<span><i class="fas fa-eye"></i> {{ post.view_count}} Lượt Xem</span> | <span><i class="fas fa-comments"></i> {{ post.comment_count}} Bình Luận</span>
+					</div>
+					<div class="article-content">
+						<!-- adbox120 or adbox160 -->
+						<div class="article-left-box">
+							<div class="article-left-box-inner">
+								<div class="article-share">
+									<a href="#" class="facebook"></a>
+									<a href="#" class="twitter"></a>
+									<a href="#" class="google-plus"></a>
+								</div>
+								<!-- <span class="add-to-favorite" data-zebra-tooltip title="Ad to favorite">
+										<i class="material-icons">&#xE866;</i>
+									</span> -->
+								<ul class="article-emoticons">
+									<li>
+										<a href="#" class="popular happy"></a><span>13</span>
+										<ul>
+											<li><a href="#" class="love"></a><span>7</span></li>
+											<li><a href="#" class="shocked"></a><span>5</span></li>
+											<li><a href="#" class="angry"></a><span>4</span></li>
+											<li><a href="#" class="crying"></a><span>1</span></li>
+											<li><a href="#" class="sleepy"></a><span>0</span></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="article-inner">
+							<div class="article-description">
+								{{post.summary |safe}}
+							</div>
+							<figure>
+								{{ post.content | safe}}
+							</figure>
+
+							<!-- article sources area end -->
+
+							<!-- article tags area start -->
+							<div class="article-tags">
+								<span class="tag-subtitle">Tags : </span>
+								<a href="#">theme</a><span class="tag-dot"></span>
+								<a href="#">template</a><span class="tag-dot"></span>
+								<a href="#">mobile ui</a>
+							</div>
+							<!-- article tags area end -->
+							<!--Section: Author Box-->
+							<section class="my-5">
+
+								<!-- Card header -->
+								<div class="card-header border-0 font-weight-bold d-flex justify-content-between blue-gradient">
+									<p class="mr-4 mb-0">Tác Giả Bài Viết</p>
+
+								</div>
+
+								<div class="media mt-4 px-1">
+									<img class="card-img-100 d-flex z-depth-1 mr-3"
+										src="{{ post.author.profile_pic.url}}" alt="Generic placeholder image">
+									<div class="media-body">
+										<h5 class="font-weight-bold mt-0">
+											<a href="">{{ post.author}}</a>
+										</h5>
+										{{ post.author.body }}
+									</div>
+								</div>
+
+							</section>
+							<!--Section: Author Box-->
+						</div>
+
+						<!--this is important for the left ad box or share box fixer -->
+						<div id="endOfTheArticle"></div>
+
+						<!-- More article unit start -->
+						<div class="more-article">
+							<div class="w-header">
+								<div class="w-title">Bài Viết Tương Tự</div>
+								<div class="w-seperator"></div>
+							</div>
+							<div class="more-posts">
+
+								{% for same_post in same_Post.all %}
+								<div class="columns column-2">
+
+									<article class="post-box"
+										style="background-image: url({{ same_post.thumbnail.url}});">
+										<div class="post-overlay">
+
+											{% for catmore in same_post.categories.all %}
+											<a href="/categories/{{ catmore.slug }}" class="post-category"
+												title="Title of blog post" rel="tag">{{catmore.nameCat}}</a>
+											{% endfor %}
+
+
+											<h3 class="post-title">{{ same_post.title}}</h3>
+											<div class="post-meta">
+												<div class="post-meta-author-avatar">
+													<img alt="avatar" src="{{ same_post.author.profile_pic.url }}"
+														class="avatar" height="24" width="24">
+												</div>
+												<div class="post-meta-author-info">
+													<span class="post-meta-author-name">
+														<a href="#" title="Posts by {{ same_post.author }}"
+															rel="author">{{ same_post.author }}</a>
+													</span>
+													<span class="middot">·</span>
+													<span class="post-meta-date">
+														<abbr class="published updated"
+															title="{{ same_post.timestamp }}">{{ same_post.timestamp | date:'d-M-Y' }}</abbr>
+													</span>
+												</div>
+											</div>
+										</div>
+										<a href="/post/{{ same_post.slug }}" class="post-overlayLink"></a>
+									</article>
+
+								</div>
+								{% endfor %}
+
+
+
+
+
+							</div>
+						</div>
+						<!-- More article unit end -->
+
+						<!-- article comment area start -->
+						{% include './layouts/comments.html' %}
+						<!-- article comment area start -->
+
+					</div>
+				</article>
+				<!-- article body end -->
+
+				<!-- article body start -->
+				<!--
+					<article class="article-wrapper">
+						<div class="article-header">
+							
+						</div>
+						<div class="article-content">
+							<div class="article-share">
+								<div class="article-share-inner">
+									
+								</div>
+							</div>
+							<div class="article-inner">
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+								<br><br>
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+								<br><br>
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+								<br><br>
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+								<br><br>
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+							</div>
+						</div>
+					</article>
+					-->
+				<!-- article body end -->
+
+
+			</div>
+			{% include './layouts/sidebar-right.html' %}
+		</div>
+	</section>
+
+</main>
+{% endblock content %}

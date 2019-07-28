@@ -1,0 +1,96 @@
+{% load static %}
+{% load thumbnail %}
+<div class="content-sidebar">
+        <div class="sidebar_inner">
+
+            <div class="widget-item">
+                <div class="w-header">
+                    <div class="w-title">Bài Viết Phổ Biến</div>
+                    <div class="w-seperator"></div>
+                </div>
+                <div class="w-boxed-post">
+                    <ul>
+                        
+                        {% for a in popuPost.all %}
+                            {% if forloop.first %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                            <a href="/post/{{ a.slug }}" style="background-image: url({{a.thumbnail.url}});">
+                                <div class="box-wrapper">
+                                    <div class="box-left">
+                                        <span>{{forloop.counter}}</span>
+                                    </div>
+                                    <div class="box-right">
+                                        <h3 class="p-title">Tiêu đề baì viết : {{ a.title }}</h3>
+                                        <div class="p-icons">
+                                            {{ a.view_count}} Lượt Xem . {{ a.comment_count}} Bình Luận
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+
+            
+            
+                
+            <div class="widget-item">
+                <div class="w-header">
+                    <div class="w-title">Bài viết nhiều lượt xem</div>
+                    <div class="w-seperator"></div>
+                </div>
+                <div class="w-carousel-post">
+                    <div class="owl-carousel" id="widgetCarousel">
+                        
+                        {% for b in viewPost.all %}
+                            <div class="item">
+                                <a href="/post/{{ b.slug}}">
+                                    {% thumbnail  b.thumbnail "300x200"  crop="center" as im %}
+                                    <img src="{{ im.url }}">
+                                    {% endthumbnail %}
+                                    <span class="w-post-title">{{ b.title }}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="widget-item">
+                    <div class="w-header">
+                        <div class="w-title">Bài viết nhiều bình luận</div>
+                        <div class="w-seperator"></div>
+                    </div>
+                    
+                    {% for c in commentPost.all %}
+                    <article class="extra-post-box">
+                            <a href="/post/{{ c.slug }}" class="extra-post-link">
+                                <div class="post-image">
+                                    <span><img src="{{ c.thumbnail.url }}" width="80" height="80"></span>
+                                </div>
+                                <div class="post-title">
+                                    {{ c.title}}
+                                    <span class="post-date">{{ c.timestamp }}</span>
+                                </div>
+                            </a>
+                        </article>
+                    {% endfor %}
+                        
+                    
+                    
+                </div>
+            <div class="seperator"></div>
+
+            <a href="#" class="widget-ad-box">
+                <img src="{% static 'img/adbox300x250.png'%}" width="300" height="250">
+            </a>
+
+        </div>
+    </div>
