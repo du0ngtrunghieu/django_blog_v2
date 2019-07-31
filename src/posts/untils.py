@@ -7,3 +7,5 @@ def generate_unique_slug(klass, field):
         unique_slug = '%s-%d' % (origin_slug, numb)
         numb += 1
     return unique_slug
+
+

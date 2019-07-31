@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% load ifinlist %}
 <!--Main container start -->
 <main class="main-container">
 	{% include './layouts/siderbar.html' %}
@@ -148,11 +149,47 @@
 
 							<!-- article tags area start -->
 							<div class="article-tags">
-								<span class="tag-subtitle">Tags : </span>
+								
+								{% if post.button.all %}
+								 	
+									{% if user.is_authenticated %}
+										{% if user.id|ifinlist:comment_in_post %}
+											
+											{% for btn_post in post.button.all %}
+											<div class="alert alert-success" role="alert">
+													<strong class="text-danger">{{ btn_post }}</strong>
+													<div class="text-center ">
+															<a role="button" target="_blank" rel="noopener noreferrer" href="{{ btn_post.link }}" class="btn btn-primary btn-lg"><i class="{% if btn_post.button == 'DW' %}fas fa-download{% else %}fas fa-location-arrow{% endif %}"></i> {% if btn_post.button == 'DW' %}Downloads{% else %}LINKS{% endif %}</a>
+													</div>
+											</div>
+										
+											{% endfor %}
+										{% else %}
+										<div class="alert alert-danger" role="alert">
+												<strong>Thông Báo!</strong> Vui lòng để lại 1 comment để lấy link (no ads)
+											</div>
+											
+										{% endif %}
+											
+									{% else %}
+									 
+									 <div class="alert alert-danger">
+										 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+										 <strong>Thông báo</strong> Vui lòng <button href="#"  data-modal="loginModal" class="btn btn-primary btn-sm" type="button"> Đăng Nhập </button> và để lại 1 bình luận để mở khóa đường dẫn (no ads)
+									 </div>
+									 
+								 	{% endif %}
+									 
+								
+								{% endif %}
+									
+								
+									
+								<!-- <span class="tag-subtitle">Tags : </span>
 								<a href="#">theme</a><span class="tag-dot"></span>
 								<a href="#">template</a><span class="tag-dot"></span>
-								<a href="#">mobile ui</a>
-							</div>
+								<a href="#">mobile ui</a> -->
+							</div> 
 							<!-- article tags area end -->
 							<!--Section: Author Box-->
 							<section class="my-5">
@@ -170,6 +207,15 @@
 										<h5 class="font-weight-bold mt-0">
 											<a href="">{{ post.author}}</a>
 										</h5>
+										<ul class="list-unstyled list-inline mb-2 pt-1">
+											<li class="list-inline-item">
+											  <a class="grey-text mr-1"><i class="fab fa-lg fa-facebook"> </i></a>
+											</li>
+											
+											<li class="list-inline-item">
+											  <a class="grey-text mr-1"><i class="fab fa-lg fa-instagram"> </i></a>
+											</li>
+										  </ul>
 										{{ post.author.body }}
 									</div>
 								</div>

@@ -30,15 +30,7 @@
 
                 </li>
 
-                {% recursetree cat %}
-                <li>
-                    {% if not node.is_leaf_node %}
-
-                    {% else %}
-                    <a href="#" class="material-button">{{ node.nameCat}}</a>
-                    {% endif %}
-                </li>
-                {% endrecursetree %}
+               
             </ul>
             <!-- header left menu end -->
 
@@ -50,14 +42,16 @@
                 <li>
                     <a href="#" class="material-button search-toggle"><i class="material-icons">&#xE8B6;</i></a>
                 </li>
+                <!-- user.socialaccount_set.all.0.get_avatar_url -->
                 {% if user.is_authenticated %}
 
                 <li class="nav-item avatar">
                     
                     <a class="material-button submenu-toggle p-0" href="#">
+                        
                         <img src="{% if user.author.profile_pic.url %} {{ user.author.profile_pic.url }} {% else%} {% static 'img/user.png'%} {% endif %}" class="rounded-circle z-depth-0" alt="avatar image"
                             height="35">
-                        <span class="hide-on-tablet">{{ user.username }}</span>
+                        <span class="hide-on-tablet">{{ user.get_full_name|default:user.username }}</span>
                     </a>
                     <div class="header-submenu">
                         <ul>

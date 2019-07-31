@@ -4,12 +4,14 @@ from .models import Post,Category,Comment
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import (authenticate,get_user_model,login,logout)
-from .forms import (FormLogin,CommentForm)
+from .forms import (FormLogin,CommentForm,FormRegister)
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
 from django.contrib import messages
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.db.models import F
+from django.contrib.auth.decorators import login_required
+
 # Dữ liệu Index Trang chủ
 def Only_data(request):
     Num_Display_Page = 3
@@ -29,6 +31,7 @@ def Only_data(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     form = FormLogin()
+    form_reg = FormRegister()
     context = {
         "posts" : dataTrend,
         "cat" : dataCat,
@@ -36,27 +39,28 @@ def Only_data(request):
         "popuPost" : popuPost,
         "viewPost" : viewPost,
         "commentPost" : commentPost,
-        "form" : form
+        "form" : form,
+        "form_reg":form_reg
     }
     return context
-def data_form_login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    form = AuthenticationForm(request=request, data=request.POST)
-    if form.is_valid():
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
+# def data_form_login(request):
+#     username = request.POST.get('username')
+#     password = request.POST.get('password')
+#     form = AuthenticationForm(request=request, data=request.POST)
+#     if form.is_valid():
+#         username = form.cleaned_data.get('username')
+#         password = form.cleaned_data.get('password')
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             login(request, user)
                 
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        else:
-            messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
-    else:
-        messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
-    form = AuthenticationForm()
-    return form
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#         else:
+#             messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+#     else:
+#         messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+#     form = AuthenticationForm()
+#     return form
 class HomePageViewIndex(View):
     
     def get(self , request):
@@ -79,6 +83,7 @@ class HomePageViewIndex(View):
         else:
             messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
         form = AuthenticationForm()
+ 
         context = Only_data(request)
         return render(request = request,template_name = "index.html",context= context)
 # Dữ liệu Bài Viết   
@@ -144,11 +149,14 @@ class PostPageDetail(DetailView):
             Post.objects.filter(slug =self.kwargs['slug']).update(view_count = F('view_count')+1)
         for cat in dataPost.categories.all():
             arr.append(cat)
-       
+        array_comment =[]
         same_Post = Post.objects.filter( featured = True, categories__in=arr ).distinct().order_by('-timestamp')
         
         formcomment = CommentForm()
         comment_post = Comment.objects.filter(post__slug__contains =self.kwargs['slug'],reply__isnull = True).order_by('-id')
+        comment_in_post = Comment.objects.filter(post__slug__contains =self.kwargs['slug']).order_by('-id')
+        
+        
         paginator = Paginator(comment_post, 5)
         all_comment = self.request.GET.get('comment')
         try:
@@ -166,13 +174,14 @@ class PostPageDetail(DetailView):
         context['form'] = form
         context['formcomment']=CommentForm
         context['all_comment']=all_comment
+        context['comment_in_post']=comment_in_post
         return context
     
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required
 def comment(request,slug):
-
     if slug is not None :
         if request.method == 'POST':
             post = get_object_or_404(Post,slug = slug)
@@ -189,6 +198,7 @@ def comment(request,slug):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+@login_required
 def rep_comment(request, slug , id):
     if request.method == 'POST':
         post = get_object_or_404(Post,slug = slug)
@@ -204,4 +214,25 @@ def rep_comment(request, slug , id):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         comment_form = CommentForm()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+# @login_required
+# def reaction_post(request , slug, vote):
+#     # 1: love
+#     # 2: 
+#     if request.method == 'POST':
+#         post = get_object_or_404(Post,slug = slug)
+#         if post:
+
+def signup(request):
+    if request.method == 'POST':
+        form = FormRegister(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 

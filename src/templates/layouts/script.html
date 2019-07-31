@@ -20,7 +20,12 @@
 
 <!--Bottostrap include -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
+
+<script src="{% static 'js/mdb.min.js' %}"></script>
+<script>
+    $('.m-modal-box#loginModal').click();
+
+</script>
 <script type="text/javascript">
 //Owl carousel initializing
 $('#postCarousel').owlCarousel({
@@ -39,13 +44,23 @@ $('#widgetCarousel').owlCarousel({
 })
 
 </script>
+
+    
+{% if user.is_authenticated is not True %}
 {% if messages %}
                
 {% for message in messages %}
 
 <script>
     $('.m-modal-box#loginModal').show();
+
 </script>
 
 {% endfor %}
+{% endif %}
+{% else %}
+<script>
+    $('.m-modal-box#loginModal').hide();
+
+</script>
 {% endif %}

@@ -26,7 +26,7 @@
                 
             </div>
             <div class="text-center mt-4">
-                <button class="btn blue-gradient btn-primary btn-md" type="submit">Bình Luận</button>
+                <button class="btn blue-gradient btn-primary btn-md" type="submit"><i class="fas fa-location-arrow"></i> Bình Luận</button>
             </div>
         </form>
 
@@ -64,11 +64,15 @@
                 <div class="comment-header">
                     <span class="author-name">{{ comment.user }} {% if comment.user.is_staff %}<i class="fas fa-check-circle text-success"></i>{% endif %}</span> -
                     <span class="comment-date">{{ comment.timestamp | timesince }} ago</span>
+                    <span class="replay-button">
+                        <a role="button" class="pull-right text-default {% if user.is_authenticated is False %}disabled{% endif %}" data-toggle="collapse" data-parent="#accordionExample" aria-expanded="true" aria-controls="collapse{{ comment.id }}" href="#collapse{{ comment.id }}">
+                            <i class="fas fa-reply"></i>
+                        </a></span>
                 </div>
                 <div class="comment-wrapper">
                     {{ comment.body | safe}} 
                 </div>
-                <div class="comment-meta">
+                <!-- <div class="comment-meta">
                     <span class="replay-button">
                         <a role="button" class="pull-right text-default {% if user.is_authenticated is False %}disabled{% endif %}" data-toggle="collapse" data-parent="#accordionExample" aria-expanded="true" aria-controls="collapse{{ comment.id }}" href="#collapse{{ comment.id }}">
                             <i class="fas fa-reply"></i>
@@ -79,7 +83,7 @@
                     <button type="button" class="comment-vote down-vote"><i
                             class="material-icons">&#xE8DC;</i> <span
                             class="vote-count">-1</span></button>
-                </div>
+                </div> -->
                 
                 {% if user.is_authenticated %}
                 <div id="collapse{{ comment.id }}" class="panel-collapse collapse" aria-labelledby="heading{{ comment.id }}" data-parent="#accordionExample">
@@ -122,7 +126,7 @@
                                 <div class="comment-wrapper">
                                     {{ rep.body | safe}}
                                 </div>
-                                <div class="comment-meta">
+                                <!-- <div class="comment-meta">
                                     
                                     <button type="button" class="comment-vote up-vote"><i
                                             class="material-icons">&#xE8DC;</i> <span
@@ -130,7 +134,7 @@
                                     <button type="button" class="comment-vote down-vote"><i
                                             class="material-icons">&#xE8DC;</i> <span
                                             class="vote-count">-1</span></button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     {% endfor %}

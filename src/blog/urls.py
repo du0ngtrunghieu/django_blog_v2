@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin 
 from django.urls import path,include
-from posts.views import HomePageViewIndex,logout_view,comment
+from posts.views import HomePageViewIndex,logout_view,comment,signup
 from django.conf.urls.static import static
 from django.conf import settings
 from filebrowser.sites import site
@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/filebrowser/', site.urls),
     
     #path('froala_editor/', include('froala_editor.urls')),
-    
+    path('accounts/', include('allauth.urls')),
     path('jet/',include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  
     path('admin/', admin.site.urls),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('post/', include('posts.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('logout/',logout_view , name='logout'),
+    path('signup/',signup,name='signup'),
     
    
   

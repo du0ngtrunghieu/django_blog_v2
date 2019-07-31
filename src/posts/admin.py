@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author,Category ,Post,Comment
+from .models import Author,Category ,Post,Comment,Button_Post
 from filebrowser.settings import ADMIN_THUMBNAIL
 from filebrowser.base import FileObject
 from django.utils.html import mark_safe
@@ -11,7 +11,10 @@ class CommentAdmin(admin.StackedInline):
     model = Comment
     extra = 0
     readonly_fields = ('body', 'post','reply','user')
-    
+class ButtonAdmin(admin.StackedInline):
+    model = Button_Post
+    extra = 0
+       
 class PageAdminPost(admin.ModelAdmin):
     
     def categories_display(self, obj):
@@ -29,7 +32,7 @@ class PageAdminPost(admin.ModelAdmin):
     list_display= ('title','slug','author','comment_count','categories_display' ,'timestamp','image_thumbnail')
     # image_display = AdminThumbnail(image_field=cached_admin_thumb)
     # image_display.short_description = 'Avatar'
-    inlines = (CommentAdmin,)
+    inlines = (ButtonAdmin,CommentAdmin,)
     search_fields =['title' , 'author']
     list_filter = ['timestamp','author',]
     list_per_page =5

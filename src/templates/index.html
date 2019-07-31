@@ -2,9 +2,11 @@
 {% load static %}
 {% load thumbnail %}
 {% block content %}
+
 <main class="main-container">
 	<!-- TrendPost start-->
 	{% include './layouts/trendpost.html' %}
+	
 
 	<!-- TrendPost end-->
 	<!-- Left sidebar menu start -->
@@ -38,7 +40,7 @@
 										{{ c.nameCat }}
 									{% endfor %}
 										"><i
-											class="material-icons"></i></a>
+											class="material-icons">blur_circular</i></a>
 									<span class="timeline-date">{{ p.timestamp | timesince }} ago</span>
 								</div>
 							</div>

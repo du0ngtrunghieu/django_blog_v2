@@ -87,7 +87,7 @@ class Post (models.Model):
     view_count = models.IntegerField(default=0 , editable = False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
    
-    thumbnail = FileBrowseField("Image", max_length=500, directory="uploads/", extensions=[".jpg",".jpeg"], blank=True)
+    thumbnail = FileBrowseField("Image", max_length=500, directory="uploads/", extensions=[".jpg",".jpeg","png"], blank=True)
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField(default = True)
     class Meta:
@@ -120,10 +120,45 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
+class Reaction_Post(models.Model):
+    love = models.IntegerField(default=0)
+    shocked  = models.IntegerField(default=0)
+    angry  = models.IntegerField(default=0)
+    crying  = models.IntegerField(default=0)
+    post = models.ForeignKey(Post, related_name='reaction', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_reaction', on_delete=models.CASCADE)
+    """Model definition for React_Post."""
 
+    # TODO: Define fields here
 
+    class Meta:
+        
+        verbose_name = 'React_Post'
+        verbose_name_plural = 'React_Posts'
+
+    
+class Button_Post(models.Model):
+    """Model definition for Button_Post."""
+    
+    btn = [
+        ('DW', 'Downloads'),
+        ('LK', 'Links'),
+    ]
+    content  = models.CharField('Nội Dung',max_length=200)
+    button = models.CharField('Button',choices = btn, max_length=200)
+    link = models.CharField('Đường Dẫn', max_length=200)
+    post = models.ForeignKey(Post,related_name='button', on_delete=models.CASCADE)
+    # TODO: Define fields here
+    
+    class Meta:
+        """Meta definition for Button_Post."""
+
+        verbose_name = 'Button'
+        verbose_name_plural = 'Button'
+
+    def __str__(self):
+        """Unicode representation of Button_Post."""
+        return self.content
  
-    
-    
     
   
