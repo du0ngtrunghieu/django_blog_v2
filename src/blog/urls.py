@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin 
 from django.urls import path,include
-from posts.views import HomePageViewIndex,logout_view,comment,signup
+from posts.views import HomePageView,logout_view,comment,signup,Signin,CategoryPageView
 from django.conf.urls.static import static
 from django.conf import settings
 from filebrowser.sites import site
@@ -30,11 +30,12 @@ urlpatterns = [
     path('jet/',include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  
     path('admin/', admin.site.urls),
-    path('',HomePageViewIndex.as_view(),name='home'),
+    path('',HomePageView,name='home'),
     path('post/', include('posts.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('logout/',logout_view , name='logout'),
     path('signup/',signup,name='signup'),
+    path('<slug:slug>/',CategoryPageView,name='category'),
     
    
   

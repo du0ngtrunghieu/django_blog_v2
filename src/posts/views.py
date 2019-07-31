@@ -13,13 +13,14 @@ from django.db.models import F
 from django.contrib.auth.decorators import login_required
 
 # Dữ liệu Index Trang chủ
-def Only_data(request):
+
+def data_base(request):
     Num_Display_Page = 3
-    dataTrend = Post.objects.filter(featured = True).order_by('-timestamp')[:3]
-    dataCat = Category.objects.filter( featured = True)
-    popuPost = Post.objects.filter( featured = True).order_by('-view_count','-comment_count')[:4]
-    viewPost = Post.objects.filter( featured = True).order_by('-view_count')[:4]
-    commentPost = Post.objects.filter( featured = True).order_by('-comment_count')[:3]
+    Trend_data = Post.objects.filter(featured = True).order_by('-timestamp')[:3]
+    Cat_data = Category.objects.filter( featured = True)
+    Postpopu_data = Post.objects.filter( featured = True).order_by('-view_count','-comment_count')[:4]
+    Post_mostview_data = Post.objects.filter( featured = True).order_by('-view_count')[:4]
+    Post_mostcomment_data = Post.objects.filter( featured = True).order_by('-comment_count')[:3]
     all_post = Post.objects.get_queryset().order_by('-id')
         
     paginator = Paginator(all_post, Num_Display_Page)
@@ -33,12 +34,12 @@ def Only_data(request):
     form = FormLogin()
     form_reg = FormRegister()
     context = {
-        "posts" : dataTrend,
-        "cat" : dataCat,
+        "posts" : Trend_data,
+        "cat" : Cat_data,
         "all_post" : posts,
-        "popuPost" : popuPost,
-        "viewPost" : viewPost,
-        "commentPost" : commentPost,
+        "popuPost" : Postpopu_data,
+        "viewPost" : Post_mostview_data,
+        "commentPost" : Post_mostcomment_data,
         "form" : form,
         "form_reg":form_reg
     }
@@ -61,12 +62,9 @@ def Only_data(request):
 #         messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
 #     form = AuthenticationForm()
 #     return form
-class HomePageViewIndex(View):
-    
-    def get(self , request):
-        context = Only_data(request)
-        return render(request, "index.html", context)
-    def post(self, request):
+
+def HomePageView(request):
+    if request.method =='POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         form = AuthenticationForm(request=request, data=request.POST)
@@ -76,16 +74,27 @@ class HomePageViewIndex(View):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                
+                    
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             else:
                 messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
         else:
             messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
         form = AuthenticationForm()
- 
-        context = Only_data(request)
+    
+        context = data_base(request)
         return render(request = request,template_name = "index.html",context= context)
+    else:
+        context = data_base(request)
+    return render(request, "index.html", context)
+
+def CategoryPageView(request):
+    pass
+#dang nhap
+
+def Signin(request):
+    pass
+
 # Dữ liệu Bài Viết   
 def Only_data_Post(slug):
     dataCat = Category.objects.filter( featured = True)

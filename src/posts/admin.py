@@ -41,18 +41,8 @@ class PageAdminPost(admin.ModelAdmin):
     
     
 
-class PageAdminCategory(DraggableMPTTAdmin):
-    list_display = ('tree_actions','indented_title')
-    list_filter =(
-        ('parent', TreeRelatedFieldListFilter),
-                 )
-    list_display_links=(
-        'indented_title',
-                        )
-
-
-    
-    mptt_level_indent = 20
+class PageAdminCategory(admin.ModelAdmin):
+    pass  
 class PageAdminAuthor(admin.ModelAdmin):
     pass
     

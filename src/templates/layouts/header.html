@@ -29,7 +29,13 @@
                                 class="material-icons">&#xE88A;</i></span> HOME</a>
 
                 </li>
-
+                
+                {% for c in cat.all %}
+                    <li>
+                        <a href="{{c.slug}}" class="material-button">{{c.nameCat}}</a>
+                    </li>
+                {% endfor %}
+                    
                
             </ul>
             <!-- header left menu end -->

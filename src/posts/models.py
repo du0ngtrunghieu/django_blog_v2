@@ -20,18 +20,15 @@ class Author(models.Model):
        return self.user.username
    
 
-class Category(MPTTModel):
+class Category(models.Model):
     nameCat = models.CharField('Tên Thể Loai',max_length=50, unique=True)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children',verbose_name='Thể Loại Cha')
+    # parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children',verbose_name='Thể Loại Cha')
     slug = models.SlugField(unique=True,editable=False , blank = True)
     timestamp = models.DateTimeField('Ngày Tạo', auto_now=False, auto_now_add=True)
     featured = models.BooleanField(default = True)
-    class MPTTMeta:
-        
-        level_attr = 'mptt_level'
-        order_insertion_by = ['nameCat']
+    
     class Meta:
-        unique_together = ('slug', 'parent',)    
+        #unique_together = ('slug', 'parent',)    
         verbose_name_plural = "Thể Loại"
     def __str__(self):
         return self.nameCat
