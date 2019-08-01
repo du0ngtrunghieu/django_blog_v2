@@ -11,40 +11,58 @@
         </div>
         <div class="m-modal-body">
             <div class="m-modal-social-logins">
-                <div class="columns column-2">
-                    <button class="frm-button facebook material-button full" type="button">Facebook</button>
-                </div>
-                <div class="columns column-2">
-                    <button class="frm-button twitter material-button full" type="button">Twitter</button>
-                </div>
-                <div class="columns column-2">
-                    <button class="frm-button google material-button full" type="button">Google</button>
-                </div>
+                    <div class="columns column-3">
+
+                            <a type="button" class="btn btn-fb" href="{% provider_login_url "facebook" method="js_sdk" %}"><i
+                                    class="fab fa-facebook-f pr-1"></i>Facebook</a>
+                        </div>
+                        <div class="columns column-3">
+        
+                            <a type="button" class="btn btn-gplus" href="{% provider_login_url "google" %}"><i
+                                    class="fab fa-google-plus-g pr-1"></i> Google</a>
+                            <!-- <button class="frm-button google material-button full" type="button" href="{% provider_login_url "google" %}">Google</button> -->
+                        </div>
             </div>
 
             <div class="m-modal-seperator"><span>Hoặc</span></div>
 
-            <form action="/signup/" method="POST">
+            <form method="POST">
                 {% csrf_token %}
-                {{form_reg}}
-                <!-- <div class="frm-row">
-                    <input class="frm-input" type="text" name="name" placeholder="Name">
+
+                {% for b in form_reg %}
+                
+                {% if b.errors %}
+                
+                
+                        {{ b.errors }}
+                
+                
+                <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+                <script>
+                    $('.m-modal-box#registerModal').show();
+                </script>
+               
+                {% endif %}
+                
+                <div class="frm-row">
+                    {{ b}}
                 </div>
+
+                {% endfor %}
+                <style>
+                        .errorlist{
+                            color: red;
+                            list-style-type: none;
+                        }
+                        
+                </style>
+                
+                
                 <div class="frm-row">
-                    <input class="frm-input" type="text" name="username" placeholder="Username">
-                </div>
-                <div class="frm-row">
-                    <input class="frm-input" type="text" name="email" placeholder="Email">
-                </div>
-                <div class="frm-row">
-                    <input class="frm-input" type="text" name="password" placeholder="Password">
-                </div>
-                <div class="frm-row">
-                    <label class="frm-check-radio-label"><input type="checkbox" name="test"> <span>Tôi đồng ý <a
-                                href="#">các điều khoản</a>.</span></label>
-                </div> -->
-                <div class="frm-row">
-                    <button class="frm-button material-button full" type="submit" >Register</button>
+                    <button class="frm-button material-button full" name="register" type="submit" value="register">Tạo
+                        Tài Khoản</button>
                 </div>
             </form>
             <div class="frm-row">
@@ -66,35 +84,37 @@
         <div class="m-modal-body">
             <div class="m-modal-social-logins">
                 <div class="columns column-3">
-                    
-                    <a type="button" class="btn btn-fb" href="{% provider_login_url "facebook" method="js_sdk" %}"><i class="fab fa-facebook-f pr-1"></i>Facebook</a>
+
+                    <a type="button" class="btn btn-fb" href="{% provider_login_url "facebook" method="js_sdk" %}"><i
+                            class="fab fa-facebook-f pr-1"></i>Facebook</a>
                 </div>
                 <div class="columns column-3">
-                   
-                    <a type="button" class="btn btn-gplus" href="{% provider_login_url "google" %}"><i class="fab fa-google-plus-g pr-1"></i> Google</a>  
+
+                    <a type="button" class="btn btn-gplus" href="{% provider_login_url "google" %}"><i
+                            class="fab fa-google-plus-g pr-1"></i> Google</a>
                     <!-- <button class="frm-button google material-button full" type="button" href="{% provider_login_url "google" %}">Google</button> -->
                 </div>
             </div>
 
             <div class="m-modal-seperator"><span>Hoặc</span></div>
-            
+
             {% if user.is_authenticated is not True %}
-            
+
             {% for m in messages %}
-                
-                {% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ m}}
-                    </div>
-                {% endif %}
-                    
-                   
-                    
-            
-            {% endfor %}
-            
+
+            {% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger" role="alert">
+                {{ m}}
+            </div>
             {% endif %}
-                
+
+
+
+
+            {% endfor %}
+
+            {% endif %}
+
 
             <form method="POST">
 
@@ -107,7 +127,8 @@
                 {% endfor %}
 
                 <div class="frm-row">
-                    <button class="frm-button material-button full" type="submit">Login</button>
+                    <button class="frm-button material-button full" type="submit" name='login'
+                        value="login">Login</button>
                 </div>
             </form>
             <div class="frm-row">

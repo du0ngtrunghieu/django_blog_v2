@@ -1,8 +1,6 @@
 {% load static %}
 {% load mptt_tags %}
-{% if messages %}
 
-{% endif %}
 <header class="header">
     <div class="header-wrapper">
 
@@ -25,14 +23,16 @@
             <!-- header left menu start -->
             <ul class="header-navigation" data-show-menu-on-mobile>
                 <li>
-                    <a href="/" class="material-button active"> <span class="menu-icon"><i
-                                class="material-icons">&#xE88A;</i></span> HOME</a>
+                    
+                    
+                        
+                    <a href="/" class="material-button {% if title == 'Trang Chủ' %}active{% endif %}"> <span class="menu-icon"></span> HOME</a>
 
                 </li>
                 
                 {% for c in cat.all %}
                     <li>
-                        <a href="{{c.slug}}" class="material-button">{{c.nameCat}}</a>
+                        <a href="/{{c.slug}}/" class="material-button {% if title == c.nameCat %}active{% endif %}">{{c.nameCat}}</a>
                     </li>
                 {% endfor %}
                     
@@ -50,12 +50,12 @@
                 </li>
                 <!-- user.socialaccount_set.all.0.get_avatar_url -->
                 {% if user.is_authenticated %}
-
+                
                 <li class="nav-item avatar">
                     
                     <a class="material-button submenu-toggle p-0" href="#">
                         
-                        <img src="{% if user.author.profile_pic.url %} {{ user.author.profile_pic.url }} {% else%} {% static 'img/user.png'%} {% endif %}" class="rounded-circle z-depth-0" alt="avatar image"
+                        <img src="{% if user.author.profile_pic.url %}{{ user.author.profile_pic.url }}{% else%}{% static 'img/user.png'%}{% endif %}" class="rounded-circle z-depth-0" alt="avatar image"
                             height="35">
                         <span class="hide-on-tablet">{{ user.get_full_name|default:user.username }}</span>
                     </a>
@@ -80,8 +80,10 @@
 
 
 
-                <li class="hide-on-mobile"><a href="#" class="material-button" data-modal="newsletterModal"><i
-                            class="material-icons">&#xE0E1;</i></a></li>
+                <li class="hide-on-mobile">
+                    <!-- <a href="#" class="material-button" data-modal="newsletterModal"><i
+                            class="material-icons">&#xE0E1;</i></a> -->
+                        </li>
             </ul>
             <!-- header right menu end -->
 

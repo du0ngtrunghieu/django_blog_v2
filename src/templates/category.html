@@ -5,7 +5,7 @@
 
 <main class="main-container">
 	<!-- TrendPost start-->
-	{% include './layouts/trendpost.html' %}
+	
 	
 
 	<!-- TrendPost end-->
@@ -18,7 +18,7 @@
 				<div class="content-timeline">
 					<!--Timeline header area start -->
 					<div class="post-list-header">
-						<span class="post-list-title">Tất Cả Bài Viết</span>
+						<span class="post-list-title">Bài Viết</span>
 						<!-- <select class="frm-input">
 							<option value="1">Technology</option>
 							<option value="1">Book</option>
@@ -31,7 +31,7 @@
 					<!--Timeline items start -->
 					<div class="timeline-items">
 
-						{% for p in all_post %}
+						{% for p in PostinCate %}
 						<div class="timeline-item ">
 							<div class="timeline-left">
 								<div class="timeline-left-wrapper">
@@ -59,7 +59,7 @@
 									{% endfor %}
 
 
-									<a href="post/{{p.slug}}">
+									<a href="/post/{{p.slug}}">
 										<h3 class="timeline-post-title">{{p.title}}</h3>
 									</a>
 									<div class="timeline-post-info">
@@ -90,9 +90,9 @@
 					<div class="load-more mt-4">
 						
 							<ul class="pagination pg-blue">
-									{% if all_post.has_previous %}
+									{% if PostinCate.has_previous %}
 									<li class="page-item">
-											<a class="page-link" aria-label="Previous" href="?page={{ all_post.previous_page_number }}">
+											<a class="page-link" aria-label="Previous" href="?page={{ PostinCate.previous_page_number }}">
 												<span aria-hidden="true">&laquo; Trước</span>
 												<span class="sr-only">Previous</span>
 											</a>
@@ -107,19 +107,19 @@
 									
 								  	{% endif %}
 								
-								{% for num in all_post.paginator.page_range %}
+								{% for num in PostinCate.paginator.page_range %}
 
-									{% if all_post.number == num %}
+									{% if PostinCate.number == num %}
 										<li class="page-item active"><a class="page-link">{{ num }}</a></li>
-									{% elif num > all_post.number|add:'-3' and num < all_post.number|add:'3' %}
+									{% elif num > PostinCate.number|add:'-3' and num < PostinCate.number|add:'3' %}
 										<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
 										
 									{% endif %}
 
 								{% endfor %}
-								{% if all_post.has_next %}
+								{% if PostinCate.has_next %}
 								<li class="page-item">
-									<a class="page-link" aria-label="Next" href="?page={{ all_post.next_page_number }}">
+									<a class="page-link" aria-label="Next" href="?page={{ PostinCate.next_page_number }}">
 										<span aria-hidden="true">Sau &raquo;</span>
 										<span class="sr-only">Next</span>
 									</a>
