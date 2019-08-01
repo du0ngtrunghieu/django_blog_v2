@@ -14,7 +14,7 @@ User = get_user_model()
 
 class Author(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE)
-   profile_pic = models.ImageField('Avatar',upload_to='uploads/' )
+   profile_pic = FileBrowseField("Avatar", max_length=500, directory="uploads/", extensions=[".jpg",".jpeg","png",".gif"], blank=True)
    body = models.CharField("Thông Tin Thêm", max_length=500)
    def __str__(self):
        return self.user.username

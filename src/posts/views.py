@@ -14,6 +14,38 @@ from django.contrib.auth.decorators import login_required
 
 # Dữ liệu Index Trang chủ
 
+def data_category_base(request , slug):
+    categories = get_object_or_404(Category,slug = slug)
+    
+    PostinCate = Post.objects.filter(featured = True ,categories= categories).order_by('-timestamp')
+    Num_Display_Page = 1
+    Trend_data = Post.objects.filter(featured = True).order_by('-timestamp')[:3]
+    Cat_data = Category.objects.filter( featured = True)
+    Postpopu_data = Post.objects.filter( featured = True).order_by('-view_count','-comment_count')[:4]
+    Post_mostview_data = Post.objects.filter( featured = True).order_by('-view_count')[:4]
+    Post_mostcomment_data = Post.objects.filter( featured = True).order_by('-comment_count')[:3]
+    
+        
+    paginator = Paginator(PostinCate, Num_Display_Page)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    context = {
+        "posts" : Trend_data,
+        "cat" : Cat_data,
+        "PostinCate" : posts,
+        "popuPost" : Postpopu_data,
+        "viewPost" : Post_mostview_data,
+        "commentPost" : Post_mostcomment_data,
+        
+        "title":categories.nameCat
+    }
+    return context
 def data_base(request,fsignin,fsignup):
     Num_Display_Page = 3
     Trend_data = Post.objects.filter(featured = True).order_by('-timestamp')[:3]
@@ -66,11 +98,12 @@ def data_base_for_post(slug):
         "viewPost" :viewPost,
         "commentPost": commentPost,
         "same_Post": same_Post,
-        "form" : form
+        
         
     }
     
     return context
+
 def HomePageView(request):
     if request.POST.get('login') == 'login':
         formreg = FormRegister()
@@ -130,40 +163,72 @@ def HomePageView(request):
     
 
 def CategoryPageView(request,slug):
-    categories = get_object_or_404(Category,slug = slug)
-    
-    PostinCate = Post.objects.filter(featured = True ,categories= categories).order_by('-timestamp')
-    Num_Display_Page = 1
-    Trend_data = Post.objects.filter(featured = True).order_by('-timestamp')[:3]
-    Cat_data = Category.objects.filter( featured = True)
-    Postpopu_data = Post.objects.filter( featured = True).order_by('-view_count','-comment_count')[:4]
-    Post_mostview_data = Post.objects.filter( featured = True).order_by('-view_count')[:4]
-    Post_mostcomment_data = Post.objects.filter( featured = True).order_by('-comment_count')[:3]
-    
+    if request.POST.get('login') == 'login':
+        formreg = FormRegister()
+        if request.method =='POST':
+           
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            form = AuthenticationForm(request=request, data=request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                        
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                else:
+                    
+                    messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+            else:
+                messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+            form = FormLogin()
         
-    paginator = Paginator(PostinCate, Num_Display_Page)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    form = FormLogin()
-    form_reg = FormRegister()
-    context = {
-        "posts" : Trend_data,
-        "cat" : Cat_data,
-        "PostinCate" : posts,
-        "popuPost" : Postpopu_data,
-        "viewPost" : Post_mostview_data,
-        "commentPost" : Post_mostcomment_data,
-        "form" : form,
-        "form_reg":form_reg,
-        "title":categories.nameCat
-    }
+            context = data_category_base(request,slug)
+            context['form'] =form
+            context['form_reg'] =formreg
+            
+            return render(request = request,template_name = "category.html",context= context)
+        else:
+            form = FormLogin()
+            context = data_category_base(request,slug)
+            context['form'] =form
+        
+        return render(request, "category.html", context)
+    elif request.POST.get('register') == 'register':
+        form = FormLogin()
+        if request.method == 'POST':
+            formreg = FormRegister(request.POST)
+            if formreg.is_valid():
+                formreg.save()
+                username = formreg.cleaned_data.get('username')
+                raw_password = formreg.cleaned_data.get('password1')
+                user = authenticate(username=username, password=raw_password)
+                login(request, user)
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+
+            context = data_category_base(request,slug)
+            context['form_reg'] =formreg
+            context['form'] =form
+            return render(request, "category.html", context)
+        else:
+            context = data_category_base(request,slug)
+            formreg = FormRegister()
+            context['form_reg'] =formreg
+            context['form'] =form
+           
+        return render(request, "category.html", context)
+
+    else:
+        context = data_category_base(request,slug)
+        form = FormLogin()
+        formreg = FormRegister()
+        context['form_reg'] =formreg
+        context['form'] =form
+        
    
-    return render(request, "category.html", context)
+        return render(request, "category.html", context)
 
 
 #dang nhap
@@ -177,58 +242,7 @@ class PostPageDetail(DetailView):
     model = Post
     template_name='post.html'
     def post(self, request, *args, **kwargs):
-        if request.POST.get('login') == 'login':
-            formreg = FormRegister()
-            if request.method =='POST':
-            
-                username = request.POST.get('username')
-                password = request.POST.get('password')
-                form = AuthenticationForm(request=request, data=request.POST)
-                if form.is_valid():
-                    username = form.cleaned_data.get('username')
-                    password = form.cleaned_data.get('password')
-                    user = authenticate(username=username, password=password)
-                    if user is not None:
-                        login(request, user)
-                            
-                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                    else:
-                        
-                        messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
-                else:
-                    messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
-                form = FormLogin()
-            
-                context = data_base(request,form,formreg)
-                return render(request = request,template_name = "index.html",context= context)
-            else:
-                form = FormLogin()
-                context = data_base(request,form,formreg)
-            
-            return render(request, "index.html", context)
-        elif request.POST.get('register') == 'register':
-            form = FormLogin()
-            if request.method == 'POST':
-                formreg = FormRegister(request.POST)
-                if formreg.is_valid():
-                    formreg.save()
-                    username = formreg.cleaned_data.get('username')
-                    raw_password = formreg.cleaned_data.get('password1')
-                    user = authenticate(username=username, password=raw_password)
-                    login(request, user)
-                    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
-
-                context = data_base(request,form,formreg)
-                return render(request, "index.html", context)
-            else:
-                formreg = FormRegister()
-                context = data_base(request,form,formreg)
-            return render(request, "index.html", context)
-        else:
-            form = FormLogin()
-            form_reg = FormRegister()
-        context = data_base_for_post(self.kwargs['slug'])
-        return render(request = request,template_name = "post.html",context= context)
+        pass
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -272,6 +286,7 @@ class PostPageDetail(DetailView):
         context['formcomment']=CommentForm
         context['all_comment']=all_comment
         context['comment_in_post']=comment_in_post
+        context['title'] = dataPost.title
         return context
     
 def logout_view(request):
