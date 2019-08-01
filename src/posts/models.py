@@ -14,14 +14,14 @@ User = get_user_model()
 
 class Author(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE)
-   profile_pic = FileBrowseField("Avatar", max_length=500, directory="uploads/", extensions=[".jpg",".jpeg","png",".gif"], blank=True)
-   body = models.CharField("Thông Tin Thêm", max_length=500)
+   profile_pic = FileBrowseField("Avatar", max_length=5000, directory="uploads/", extensions=[".jpg",".jpeg","png",".gif"], blank=True)
+   body = models.CharField("Thông Tin Thêm", max_length=5000)
    def __str__(self):
        return self.user.username
    
 
 class Category(models.Model):
-    nameCat = models.CharField('Tên Thể Loai',max_length=50, unique=True)
+    nameCat = models.CharField('Tên Thể Loai',max_length=5000, unique=True)
     # parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children',verbose_name='Thể Loại Cha')
     slug = models.SlugField(unique=True,editable=False , blank = True)
     timestamp = models.DateTimeField('Ngày Tạo', auto_now=False, auto_now_add=True)
@@ -73,7 +73,7 @@ class Category(models.Model):
 
 
 class Post (models.Model):
-    title = models.CharField('Tiêu Đề', max_length=200,
+    title = models.CharField('Tiêu Đề', max_length=2000,
                             help_text='Nhập tiêu đề')
     summary = models.TextField(verbose_name='Tóm Tắt')
     slug = models.SlugField(unique=True,editable=False , blank = True)
@@ -84,7 +84,7 @@ class Post (models.Model):
     view_count = models.IntegerField(default=0 , editable = False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
    
-    thumbnail = FileBrowseField("Image", max_length=500, directory="uploads/", extensions=[".jpg",".jpeg","png"], blank=True)
+    thumbnail = FileBrowseField("Image", max_length=5000, directory="uploads/", extensions=[".jpg",".jpeg","png"], blank=True)
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField(default = True)
     class Meta:
@@ -141,9 +141,9 @@ class Button_Post(models.Model):
         ('DW', 'Downloads'),
         ('LK', 'Links'),
     ]
-    content  = models.CharField('Nội Dung',max_length=200)
-    button = models.CharField('Button',choices = btn, max_length=200)
-    link = models.CharField('Đường Dẫn', max_length=200)
+    content  = models.CharField('Nội Dung',max_length=2000)
+    button = models.CharField('Button',choices = btn, max_length=2000)
+    link = models.CharField('Đường Dẫn', max_length=2000)
     post = models.ForeignKey(Post,related_name='button', on_delete=models.CASCADE)
     # TODO: Define fields here
     
