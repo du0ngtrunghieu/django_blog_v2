@@ -10,3 +10,9 @@ $ python manage.py runserver
 	    
         
 ### Ver Django 2.2
+
+
+### Demo
+```
+trunghieuit.herokuapp.com 
+```
