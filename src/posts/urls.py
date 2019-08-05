@@ -9,6 +9,7 @@ urlpatterns = [
     path('<slug:slug>/comment-<int:id>/',rep_comment,name='comment-rep'),
     
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

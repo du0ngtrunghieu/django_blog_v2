@@ -23,20 +23,22 @@
             <!-- header left menu start -->
             <ul class="header-navigation" data-show-menu-on-mobile>
                 <li>
-                    
-                    
-                        
-                    <a href="/" class="material-button {% if title == 'Trang Chủ' %}active{% endif %}"> <span class="menu-icon"></span> HOME</a>
+
+
+
+                    <a href="/" class="material-button {% if title == 'Trang Chủ' %}active{% endif %}"> <span
+                            class="menu-icon"></span> HOME</a>
 
                 </li>
-                
+
                 {% for c in cat.all %}
-                    <li>
-                        <a href="/{{c.slug}}/" class="material-button {% if title == c.nameCat %}active{% endif %}">{{c.nameCat}}</a>
-                    </li>
+                <li>
+                    <a href="/{{c.slug}}/"
+                        class="material-button {% if title == c.nameCat %}active{% endif %}">{{c.nameCat}}</a>
+                </li>
                 {% endfor %}
-                    
-               
+
+
             </ul>
             <!-- header left menu end -->
 
@@ -50,13 +52,13 @@
                 </li>
                 <!-- user.socialaccount_set.all.0.get_avatar_url -->
                 {% if user.is_authenticated %}
-                
-                <li class="nav-item avatar">
-                    
+
+                <li class="nav-item avatar mr-4">
+
                     <a class="material-button submenu-toggle p-0" href="#">
-                        
-                        <img src="{% if user.author.profile_pic.url %}{{ user.author.profile_pic.url }}{% else%}{% static 'img/user.png'%}{% endif %}" class="rounded-circle z-depth-0" alt="avatar image"
-                            height="35">
+
+                        <img src="{% if user.author.profile_pic.url %}{{ user.author.profile_pic.url }}{% else%}{% static 'img/user.png'%}{% endif %}"
+                            class="rounded-circle z-depth-0" alt="avatar image" height="35">
                         <span class="hide-on-tablet">{{ user.get_full_name|default:user.username }}</span>
                     </a>
                     <div class="header-submenu">
@@ -83,7 +85,7 @@
                 <li class="hide-on-mobile">
                     <!-- <a href="#" class="material-button" data-modal="newsletterModal"><i
                             class="material-icons">&#xE0E1;</i></a> -->
-                        </li>
+                </li>
             </ul>
             <!-- header right menu end -->
 
@@ -91,11 +93,10 @@
 
         <!--header search panel start -->
         <div class="search-bar">
-            <form class="search-form">
+            <form class="search-form" action="/s/">
                 <div class="search-input-wrapper">
-                    <input type="text" name="qq" placeholder="Nhập Để Tìm Kiếm........" class="search-input">
-                    <button type="submit" name="search" class="search-submit"><i
-                            class="material-icons">&#xE5C8;</i></button>
+                    <input type="text" name="search" placeholder="Nhập Để Tìm Kiếm........" class="search-input">
+                    <button type="submit" class="search-submit"><i class="material-icons">&#xE5C8;</i></button>
                 </div>
                 <span class="search-close search-toggle">
                     <i class="material-icons">&#xE5CD;</i>

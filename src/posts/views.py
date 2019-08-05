@@ -78,7 +78,9 @@ def data_base(request,fsignin,fsignup):
     return context
 
 # Dữ liệu Bài Viết   
-def data_base_for_post(slug):
+def data_base_for_post(request,slug):
+    
+
     dataCat = Category.objects.filter( featured = True)
     popuPost = Post.objects.filter( featured = True).order_by('-view_count','-comment_count')[:4]
     viewPost = Post.objects.filter( featured = True).order_by('-view_count')[:4]
@@ -86,20 +88,41 @@ def data_base_for_post(slug):
     
     arr = []
     dataPost = get_object_or_404(Post, slug=slug)
+    if dataPost:
+        Post.objects.filter(slug =slug).update(view_count = F('view_count')+1)
     for cat in dataPost.categories.all():
         arr.append(cat)
-       
+    array_comment =[]
     same_Post = Post.objects.filter( featured = True, categories__in=arr ).distinct().order_by('-timestamp')
+        
+    formcomment = CommentForm()
+    comment_post = Comment.objects.filter(post__slug__contains =slug,reply__isnull = True).order_by('-id')
+    comment_in_post = Comment.objects.filter(post__slug__contains =slug).order_by('-id')
+        
+        
+    paginator = Paginator(comment_post, 5)
+    all_comment = request.GET.get('comment')
+    try:
+        all_comment = paginator.page(all_comment)
+    except PageNotAnInteger:
+        all_comment = paginator.page(1)
+    except EmptyPage:
+        all_comment = paginator.page(paginator.num_pages)
     form = FormLogin()
-    context = {
-        "cat": dataCat,
-        "post": dataPost,
-        "popuPost": popuPost,
-        "viewPost" :viewPost,
-        "commentPost": commentPost,
-        "same_Post": same_Post,
-        
-        
+    formreg = FormRegister()
+
+    context ={
+        "post":dataPost,
+        "popuPost":popuPost,
+        "viewPost":viewPost,
+        "commentPost":commentPost,
+        "same_Post":same_Post,
+        # "form":form,
+        # "form_reg":form_reg,
+        "formcomment":formcomment,
+        "all_comment":all_comment,
+        "comment_in_post":comment_in_post,
+        "title":dataPost.title,
     }
     
     return context
@@ -231,19 +254,78 @@ def CategoryPageView(request,slug):
         return render(request, "category.html", context)
 
 
+def SearchPageVie(request):
+    pass
 #dang nhap
 
 def Signin(request):
     pass
 
-
+def handler404view(request,exception):
+    return render(request, '404.html', status=404)
+def handler500(request):
+    return render(request, '404.html', status=500)
 
 class PostPageDetail(DetailView):
     model = Post
     template_name='post.html'
     def post(self, request, *args, **kwargs):
-        pass
+        if request.POST.get('login') == 'login':
+            formreg = FormRegister()
+            if request.method =='POST':
+            
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                form = AuthenticationForm(request=request, data=request.POST)
+                if form.is_valid():
+                    username = form.cleaned_data.get('username')
+                    password = form.cleaned_data.get('password')
+                    user = authenticate(username=username, password=password)
+                    if user is not None:
+                        login(request, user)
+                            
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    else:
+                        
+                        messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+                else:
+                    messages.error(request, "Tài khoản hoặc mật khẩu không đúng !!.Vui lòng kiểm tra lại")
+                form = FormLogin()
+            
+                context = data_base_for_post(request,self.kwargs['slug'])
+                context['form'] =form
+                context['form_reg'] =formreg
+                
+                return render(request = request,template_name = "post.html",context= context)
+            else:
+                form = FormLogin()
+                context = data_base_for_post(request,self.kwargs['slug'])
+                context['form'] =form
+            
+            return render(request, "post.html", context)
+        if request.POST.get('register') == 'register':
+            form = FormLogin()
+            if request.method == 'POST':
+                formreg = FormRegister(request.POST)
+                if formreg.is_valid():
+                    formreg.save()
+                    username = formreg.cleaned_data.get('username')
+                    raw_password = formreg.cleaned_data.get('password1')
+                    user = authenticate(username=username, password=raw_password)
+                    login(request, user)
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
 
+                context = data_base_for_post(request,self.kwargs['slug'])
+                context['form_reg'] =formreg
+                context['form'] =form
+                return render(request, "post.html", context)
+            else:
+                context = data_base_for_post(request,self.kwargs['slug'])
+                formreg = FormRegister()
+                context['form_reg'] =formreg
+                context['form'] =form
+            
+            return render(request, "post.html", context)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

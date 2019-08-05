@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q@8s&d(u*yteoef!#)nslkh98wx06q3s=fabu51363er1p7=m0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','trunghieuit.herokuapp.com']
 
 
 # Application definition
@@ -75,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'blog.urls'
@@ -145,7 +146,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR , 'static')]
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
@@ -154,6 +154,8 @@ STATIC_ROOT = os.path.join(VENV_PATH,'static_root')
 MEDIA_ROOT = os.path.join(VENV_PATH , 'media_root')
 DIRECTORY = getattr(settings, "FILEBROWSER_DIRECTORY", 'uploads/')
 
+
+VERSIONS_BASEDIR = getattr(settings, 'FILEBROWSER_VERSIONS_BASEDIR', '_versions')
 
 TINYMCE_DEFAULT_CONFIG = {
     'height': 360,

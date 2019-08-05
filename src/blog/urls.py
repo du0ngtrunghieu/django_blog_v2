@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin 
 from django.urls import path,include
-from posts.views import HomePageView,logout_view,comment,signup,Signin,CategoryPageView
+from posts.views import HomePageView,logout_view,comment,signup,Signin,CategoryPageView,handler404view
 from django.conf.urls.static import static
 from django.conf import settings
 from filebrowser.sites import site
+from django import views
+from django.conf.urls import handler400,handler500
 
 site.directory = "uploads/"
 
@@ -35,11 +37,12 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('logout/',logout_view , name='logout'),
     path('signup/',signup,name='signup'),
-    path('<slug:slug>/',CategoryPageView,name='category'),
-    
-   
-  
-    
-]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('<slug:slug>/',CategoryPageView,name='category'), 
+]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404=handler404view
+handler500=handler500
