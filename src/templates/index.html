@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block content %}
+
+<main class="main-container">
+	<!-- TrendPost start-->
+	{% include './layouts/trendpost.html' %}
+	
+
+	<!-- TrendPost end-->
+	<!-- Left sidebar menu start -->
+	{% include './layouts/siderbar.html' %}
+	<!-- Left sidebar menu end -->
+	<section class="main-content">
+		<div class="main-content-wrapper">
+			<div class="content-body">
+				<div class="content-timeline">
+					<!--Timeline header area start -->
+					<div class="post-list-header">
+						<span class="post-list-title">Tất Cả Bài Viết</span>
+						<!-- <select class="frm-input">
+							<option value="1">Technology</option>
+							<option value="1">Book</option>
+							<option value="1">Cinema</option>
+						</select> -->
+					</div>
+					<!--Timeline header area end -->
+
+
+					<!--Timeline items start -->
+					<div class="timeline-items">
+
+						{% for p in all_post %}
+						<div class="timeline-item ">
+							<div class="timeline-left">
+								<div class="timeline-left-wrapper">
+									<a href="#" class="timeline-category " data-zebra-tooltip="" title="
+									{% for c in p.categories.all %}
+										{{ c.nameCat }}
+									{% endfor %}
+										"><i
+											class="material-icons">blur_circular</i></a>
+									<span class="timeline-date">{{ p.timestamp | timesince }} ago</span>
+								</div>
+							</div>
+							<div class="timeline-right">
+								<div class="timeline-post-image">
+									{% thumbnail  p.thumbnail "800x450"  crop="center" as im %}
+									<a href="#">
+										<img src="{{im.url }}" width="260">
+									</a>
+									{% endthumbnail %}
+								</div>
+								<div class="timeline-post-content">
+
+									{% for cat in p.categories.all %}
+									<a href="/{{cat.slug}}/" class="timeline-category-name">{{cat.nameCat}}</a>
+									{% endfor %}
+
+
+									<a href="post/{{p.slug}}">
+										<h3 class="timeline-post-title">{{p.title}}</h3>
+									</a>
+									<div class="timeline-post-info">
+										
+										<a href="#" class="author">{{p.author}}</a>
+										
+										<span class="dot"></span>
+										<span class="comment"><i class="fas fa-comments"></i> {{p.comment_count}} Bình Luận</span>
+										<span class="dot"></span>
+										<span class="comment"><i class="fas fa-eye"></i> {{p.view_count}} Lượt Xem</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+
+
+
+
+
+
+
+					</div>
+					<!--Timeline items end -->
+
+					<!--Data load more button start  -->
+
+					<div class="load-more mt-4">
+						
+							<ul class="pagination pg-blue">
+									{% if all_post.has_previous %}
+									<li class="page-item">
+											<a class="page-link" aria-label="Previous" href="?page={{ all_post.previous_page_number }}">
+												<span aria-hidden="true">&laquo; Trước</span>
+												<span class="sr-only">Previous</span>
+											</a>
+									</li>
+									{% else %}
+									<li class="page-item">
+										<a class="page-link disabled" aria-label="Previous" href="">
+											<span aria-hidden="true">&laquo; Trước</span>
+											<span class="sr-only">Previous</span>
+										</a>
+									</li>
+									
+								  	{% endif %}
+								
+								{% for num in all_post.paginator.page_range %}
+
+									{% if all_post.number == num %}
+										<li class="page-item active"><a class="page-link">{{ num }}</a></li>
+									{% elif num > all_post.number|add:'-3' and num < all_post.number|add:'3' %}
+										<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+										
+									{% endif %}
+
+								{% endfor %}
+								{% if all_post.has_next %}
+								<li class="page-item">
+									<a class="page-link" aria-label="Next" href="?page={{ all_post.next_page_number }}">
+										<span aria-hidden="true">Sau &raquo;</span>
+										<span class="sr-only">Next</span>
+									</a>
+								</li>
+								{% else %}
+								<li class="page-item">
+									<a class="page-link disabled" aria-label="Next" href="">
+										<span aria-hidden="true">Sau &raquo;</span>
+										<span class="sr-only">Next</span>
+									</a>
+								</li>
+								{% endif %}
+							</ul>
+						
+						<!-- <button class="load-more-button material-button" type="button">
+							<i class="material-icons">&#xE5D5;</i>
+							<span>Load More</span>
+						</button> -->
+					</div>
+					<!--Data load more button start  -->
+				</div>
+
+			</div>
+			{% include './layouts/sidebar-right.html' %}
+		</div>
+	</section>
+
+</main>
+{% endblock content %}
